@@ -4,12 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Meeting Summarizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
-<body>
-    <h1>Welcome to Video Meeting Summarizer</h1>
-    <p>This application summarizes your Video Meet calls.</p>
-    <footer>
-        <p>&copy; 2025 Video Meeting Summarizer. All rights reserved.</p>
+<body class="bg-gradient-blue">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-blue">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-video me-2 text-light-blue"></i>
+                <span class="fw-bold">Video Meeting Summarizer</span>
+            </a>
+        </div>
+    </nav>    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-header bg-blue py-3">
+                        <h3 class="text-center fw-bold text-white mb-0">
+                            <i class="fas fa-film me-2 text-light-blue"></i>Summarize Your Meeting Videos
+                        </h3>
+                    </div>                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="upload-container mb-4 text-center">
+                                    <div id="dropZone" class="drop-zone rounded-3 p-4 border border-dashed border-blue position-relative">
+                                        <input type="file" id="fileInput" class="position-absolute top-0 start-0 opacity-0 w-100 h-100" accept="video/*">
+                                        <div class="text-center">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-blue mb-2"></i>
+                                            <h5>Drag & Drop or Click to Upload</h5>
+                                            <p class="text-secondary small">Supported formats: MP4, AVI, MOV</p>
+                                        </div>
+                                    </div>
+                                    <div id="fileInfo" class="mt-3 d-none">                                <div class="d-flex align-items-center">
+                                            <i class="fas fa-file-video text-blue me-2"></i>
+                                            <span id="fileName">filename.mp4</span>
+                                            <button id="removeFile" class="btn btn-sm btn-outline-blue ms-auto">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="durationSlider" class="form-label">
+                                        <i class="fas fa-clock me-2 text-blue"></i>Target Duration: <span id="durationValue" class="text-blue fw-bold">5</span> minutes
+                                    </label>
+                                    <input type="range" class="form-range blue-range" id="durationSlider" min="1" max="10" value="5">
+                                </div>
+                                <div class="d-grid">
+                                    <button id="processBtn" class="btn btn-blue btn-lg" disabled>
+                                        <i class="fas fa-magic me-2"></i>Generate Summary
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="output-container">
+                                    <div id="processingInfo" class="d-none">
+                                        <h5 class="border-bottom pb-2">
+                                            <i class="fas fa-spinner fa-spin me-2"></i>Processing
+                                        </h5>
+                                        <div class="mt-3">
+                                            <div class="progress mb-2" style="height: 20px;">
+                                                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                                            </div>
+                                            <p id="statusMessage" class="small text-muted">Initializing...</p>
+                                        </div>
+                                    </div>                                <div id="resultContainer" class="d-none mt-3">
+                                        <h5 class="border-bottom pb-2">
+                                            <i class="fas fa-check-circle me-2 text-blue"></i>Summary Ready
+                                        </h5>
+                                        <div class="mt-3">
+                                            <div class="ratio ratio-16x9 mb-3">
+                                                <video id="outputVideo" controls class="rounded shadow-sm">
+                                                    <source id="videoSource" src="" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            </div>
+                                            <div class="d-grid gap-2">
+                                                <a id="downloadBtn" class="btn btn-blue-gradient" href="#" download>
+                                                    <i class="fas fa-download me-2"></i>Download Summary
+                                                </a>
+                                                <button id="newSummaryBtn" class="btn btn-outline-blue">
+                                                    <i class="fas fa-plus me-2"></i>Create New Summary
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  <div class="card mt-4 shadow-sm border-blue-light">
+                    <div class="card-body">
+                        <h5><i class="fas fa-info-circle me-2 text-blue"></i>How It Works</h5>
+                        <ol class="mb-0 text-blue-dark">
+                            <li>Upload your video meeting recording</li>
+                            <li>Adjust the target duration for your summary</li>
+                            <li>Click "Generate Summary" and wait for processing</li>
+                            <li>Watch and download your summarized video</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark-blue text-white mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 Video Meeting Summarizer. All rights reserved.</p>
+        </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/app.js"></script>
 </body>
 </html>

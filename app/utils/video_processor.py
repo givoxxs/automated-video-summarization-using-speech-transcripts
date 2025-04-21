@@ -182,7 +182,7 @@ async def cut_segment(video_path: Path, start_time: float, end_time: float, outp
         )
         
         # Thực hiện cắt video
-        video_clip_to_write = video_clip.subclip(adjusted_start_time, adjusted_end_time)
+        video_clip_to_write = video_clip.subclipped(adjusted_start_time, adjusted_end_time)
         
         # Kiểm tra xem subclip có thành công không
         if not video_clip_to_write:

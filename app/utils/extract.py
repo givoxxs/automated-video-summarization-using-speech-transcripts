@@ -49,16 +49,19 @@ def load_whisper_model(model_name: str = "base") -> Optional[Any]:
         print(f"Failed to load Whisper model '{model_name}': {e}")
     return model
 
-def extract_transcript(audio_path: str, whisper_model: Any) -> List[TimedWord]:
+def extract_transcript(audio_path: str | Path, whisper_model: Any) -> List[TimedWord]:
     if whisper_model is None:
         print("Whisper model is not loaded. Cannot perform speech recognition.")
         return []
     
-    if not os.path.exists(audio_path):
-        print(f"Audio file not found at path: {audio_path}")
+    # Convert Path object to string if needed
+    audio_path_str = str(audio_path) if isinstance(audio_path, Path) else audio_path
+    
+    if not os.path.exists(audio_path_str):
+        print(f"Audio file not found at path: {audio_path_str}")
         return [] 
     try:
-        result = whisper_model.transcribe(audio_path, word_timestamps=True)
+        result = whisper_model.transcribe(audio_path_str, word_timestamps=True)
         segments = result["segments"]
 
         transcripts = []
@@ -97,7 +100,7 @@ async def cut_segment(video_path: Path, start_time: float, end_time: float, outp
         loop = asyncio.get_event_loop()
         video = await loop.run_in_executor(
             None, 
-            lambda: VideoFileClip(str(video_path), target_resolution=None).subclip(start_time, end_time)
+            lambda: VideoFileClip(str(video_path), target_resolution=None).subclipped(start_time, end_time)
         )
         
         # Ghi file video đã cắt

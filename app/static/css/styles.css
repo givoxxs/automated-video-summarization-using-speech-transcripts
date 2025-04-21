@@ -1,0 +1,183 @@
+/* Custom Styles for Video Meeting Summarizer */
+
+/* Blue Color Palette */
+:root {
+    --dark-blue: #0c4a6e;
+    --blue: #0369a1;
+    --light-blue: #38bdf8;
+    --blue-light: #e0f2fe;
+    --blue-dark: #0c4a6e;
+}
+
+/* Background Colors */
+.bg-dark-blue {
+    background-color: var(--dark-blue) !important;
+}
+
+.bg-blue {
+    background-color: var(--blue) !important;
+}
+
+.bg-light-blue {
+    background-color: var(--light-blue) !important;
+}
+
+.bg-gradient-blue {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+}
+
+/* Text Colors */
+.text-blue {
+    color: var(--blue) !important;
+}
+
+.text-light-blue {
+    color: var(--light-blue) !important;
+}
+
+.text-blue-dark {
+    color: var(--blue-dark) !important;
+}
+
+/* Border Colors */
+.border-blue {
+    border-color: var(--blue) !important;
+}
+
+.border-blue-light {
+    border-color: var(--light-blue) !important;
+}
+
+/* Button Styles */
+.btn-blue {
+    background-color: var(--blue);
+    color: white;
+}
+
+.btn-blue:hover {
+    background-color: var(--dark-blue);
+    color: white;
+}
+
+.btn-blue-gradient {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--light-blue) 100%);
+    color: white;
+}
+
+.btn-blue-gradient:hover {
+    background: linear-gradient(135deg, var(--light-blue) 0%, var(--blue) 100%);
+    color: white;
+}
+
+.btn-outline-blue {
+    border-color: var(--blue);
+    color: var(--blue);
+}
+
+.btn-outline-blue:hover {
+    background-color: var(--blue);
+    color: white;
+}
+
+/* Range Slider */
+.blue-range::-webkit-slider-thumb {
+    background: var(--blue);
+}
+
+.blue-range::-moz-range-thumb {
+    background: var(--blue);
+}
+
+.blue-range::-ms-thumb {
+    background: var(--blue);
+}
+
+/* Border Styles */
+.border-dashed {
+    border-style: dashed !important;
+}
+
+/* Drop Zone */
+.drop-zone {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+    background-color: rgba(3, 105, 161, 0.05);
+}
+
+.drop-zone.dragover {
+    border-color: var(--blue) !important;
+}
+
+#fileInput {
+    cursor: pointer;
+    z-index: 2;
+}
+
+.output-container {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+#resultContainer video {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Progress Bar */
+.progress {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--light-blue) 100%);
+}
+
+/* Animation for processing steps */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.processing-step {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--blue-light);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--blue);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-blue);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .drop-zone {
+        min-height: 150px;
+    }
+}
