@@ -1,156 +1,179 @@
 # Video Meeting Summarizer
 
-![Video Meeting Summarizer](https://img.shields.io/badge/SGroup--AI-Video%20Meeting%20Summarizer-blue)
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.95.0%2B-blue)
-![Whisper](https://img.shields.io/badge/OpenAI-Whisper-blue)
+![Video Meeting Summarizer](https://img.shields.io/badge/Status-In%20Development-yellow)
+![Python](https://img.shields.io/badge/Python-3.8+-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.95.0+-green)
+![Whisper](https://img.shields.io/badge/Whisper-AI-purple)
 
-## 📝 Overview
+## 📑 Overview
 
-Video Meeting Summarizer is an AI-powered web application that automatically condenses long meeting recordings into concise summary videos. The tool uses speech recognition, natural language processing, and video processing techniques to identify and extract the most important segments of a meeting, saving time for busy professionals.
+Video Meeting Summarizer is an advanced tool that automatically condenses long videos (meetings, lectures, presentations) into concise summaries by analyzing speech transcripts. Inspired by the research paper ["Automated video summarization using speech transcripts"](https://scispace.com/pdf/automated-video-summarization-using-speech-transcripts-51swqrqbg4.pdf), this project implements an intelligent algorithm that segments videos based on speech patterns and ranks segments by content importance.
 
-## ✨ Features
+### 🎯 Target Video Types
 
-- **Video Upload**: Easy drag & drop or file selection interface
-- **Customizable Summary Duration**: Choose your preferred summary length
-- **Advanced Processing**: Multi-stage pipeline for accurate summarization
-  - Audio extraction from video
-  - Speech-to-text transcription using Whisper
-  - Transcript segmentation
-  - Importance scoring of segments
-  - Intelligent video skimming
-- **Real-time Progress Tracking**: Monitor the processing stages with a progress bar
-- **Instant Playback**: Watch your summarized video directly in the browser
-- **Download Option**: Save the summarized video to your device
+- **Documentaries**: Condense long documentary films while preserving key information
+- **Educational Videos**: Summarize lectures and instructional videos for easier review
+- **Presentations**: Create concise versions of conference talks and business presentations
+- **Meeting Recordings**: Distill important content from lengthy video conference calls
 
-## 🛠️ Technical Architecture
+## 🧠 How It Works
 
-The application is built with a modern tech stack:
+The summarization algorithm follows a comprehensive pipeline:
 
-- **Frontend**: HTML, CSS, JavaScript with Bootstrap 5
-- **Backend**: Python with FastAPI
-- **Speech Recognition**: OpenAI's Whisper model
-- **Video Processing**: MoviePy for video manipulation
-- **Asynchronous Processing**: Background tasks for handling resource-intensive operations
-
-### Processing Pipeline
-
-1. **Video Upload**: User submits a video file through the web interface
-2. **Audio Extraction**: The system extracts audio from the video
-3. **Transcription**: Whisper API converts speech to text with timestamps
-4. **Segmentation**: The transcript is divided into meaningful segments
-5. **Scoring**: Each segment is scored based on importance
-6. **Video Skimming**: Important segments are selected to fit the target duration
-7. **Compilation**: Selected segments are combined into a cohesive summary video
+1. **Audio Extraction**: Extract audio track from the video file
+2. **Speech Recognition**: Generate accurate transcripts using Whisper AI
+3. **Segmentation**: Divide transcript into logical segments based on speech pauses
+4. **Segment Scoring**: Rank segments by:
+   - Word frequency analysis
+   - Important word pair co-occurrence
+   - Dominant word pair detection
+5. **Video Skim Generation**: Select highest-scoring segments to create a condensed video summary
+6. **Final Processing**: Concatenate selected segments into a seamless summary video
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Python 3.10+
-- FFmpeg (for video processing)
+- Python 3.8+
+- FFmpeg (for audio/video processing)
+- Required Python packages (see `requirements.txt`)
 
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/video-meet-summarizer.git
-   cd video-meet-summarizer
-   ```
+```bash
+git clone https://github.com/your-org/video-meet-summarizer.git
+cd video-meet-summarizer
+```
 
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+2. Install required packages:
+```bash
+pip install -r requirements.txt
+```
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+3. Make sure FFmpeg is installed and available in your system PATH.
 
-4. Set up configuration:
-   ```bash
-   # Update config.py with your settings if needed
-   ```
+### Usage
 
-### Running the Application
+#### API Endpoint
 
-1. Start the FastAPI server:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
+The application exposes a FastAPI endpoint for video summarization:
 
-2. Open your browser and navigate to:
-   ```
-   http://localhost:8000
-   ```
+```
+POST /api/v1/summarize
+```
 
-## 📁 Project Structure
+Parameters:
+- `file`: The video file to summarize (multipart/form-data)
+- `summary_type`: Type of summary to generate
+- `user_id`: Optional user identifier
+
+#### Direct Script Usage
+
+You can also invoke the summarization pipeline directly:
+
+```python
+from app.utils.pipeline import summary_video
+from pathlib import Path
+
+# Summarize a video with default 5-minute target length
+await summary_video(
+    video_path=Path("path/to/your/video.mp4"),
+    target_duration=300,  # 5 minutes (in seconds)
+    model_name="base"     # Whisper model size
+)
+```
+
+## 🛠️ Project Structure
 
 ```
 video-meet-summarier/
+├── README.md
+├── requirements.txt
 ├── app/
-│   ├── apis/             # API endpoints
-│   ├── models/           # Data models
-│   ├── static/           # CSS, JavaScript, etc.
-│   ├── templates/        # HTML templates
-│   ├── utils/            # Utility functions
-│   ├── config.py         # Application configuration
-│   └── main.py           # Application entry point
-├── data/
-│   ├── audio/            # Extracted audio files
-│   ├── summaries/        # Generated summary files
-│   └── video/            # Uploaded video files
-├── requirements.txt      # Project dependencies
-└── README.md             # Project documentation
+│   ├── __init__.py
+│   ├── main.py          # FastAPI application entry point
+│   ├── config.py        # Configuration management
+│   ├── apis/            # API endpoint definitions
+│   ├── models/          # Data models
+│   ├── static/          # Static assets (CSS, JS)
+│   ├── templates/       # HTML templates
+│   └── utils/           # Utility modules
+│       ├── calc_score.py       # Segment scoring
+│       ├── extract.py          # Audio extraction & transcription
+│       ├── pipeline.py         # Main processing pipeline
+│       ├── segmentation.py     # Transcript segmentation
+│       ├── skim_generator.py   # Video summary generation
+│       └── video_processor.py  # Video manipulation functions
+└── data/                # Data storage directory
+    ├── audio/           # Extracted audio files
+    ├── summaries/       # Generated video summaries
+    ├── temp_skims/      # Temporary processing files
+    ├── transcript/      # Generated transcripts
+    └── video/           # Original uploaded videos
 ```
 
-## 🔧 Configuration
+## ⚙️ Configuration
 
-The application can be configured by modifying `app/config.py`. Key settings include:
+The application is configurable via the `Config` class in `app/config.py`. Key parameters include:
 
-- `WHISPER_MODEL_NAME`: Model size for the Whisper speech recognition (tiny, base, small, medium, large)
-- `WHISPER_API_URL`: URL for external Whisper API integration
-- File paths for audio, video, and summary storage
+- **Segmentation Parameters**:
+  - `SEGMENTATION_N`: Speech pause threshold (1.5 seconds default)
+  - `SEGMENTATION_M`: Minimum segment length (10 seconds default)
 
-## 📊 How It Works
+- **Scoring Parameters**:
+  - `SCORING_K`: Word frequency weight (2.0 default)
+  - `SCORING_B`: Base scoring factor (0.75 default)
+  - `DOMINANT_PAIR_COUNT`: Number of word pairs to consider (30 default)
+  - `DOMINANT_PAIR_BOOST`: Boost factor for important pairs (1.2 default)
 
-### 1. Speech Recognition
-The application uses OpenAI's Whisper model to transcribe speech from the video with precise timestamps. Each word is assigned a start and end time.
+- **Model Configuration**:
+  - `WHISPER_MODEL_NAME`: Whisper model size ("base" default)
 
-### 2. Segmentation
-The transcript is divided into meaningful segments based on linguistic and semantic patterns. This creates logical units for analysis.
+## 🔬 Technical Details
 
-### 3. Scoring Algorithm
-Each segment is scored based on:
-- Information density
-- Presence of key terms or phrases
-- Speaker identification (if available)
-- Linguistic features indicating importance
+### Segmentation Algorithm
 
-### 4. Video Skimming
-The system selects segments with the highest scores while ensuring the summary meets the target duration and maintains narrative coherence.
+The segmentation process divides transcripts based on natural speech pauses:
+- A new segment begins when a pause exceeds threshold N (default 1.5 seconds)
+- Segments shorter than threshold M (default 10 seconds) are merged
+- Each segment contains word timing information for precise video cutting
 
-### 5. Video Processing
-Selected segments are extracted from the original video and concatenated to create a seamless summary video.
+### Scoring Methodology
 
-## ⚠️ Troubleshooting
+Segments are scored using a sophisticated algorithm that considers:
+1. Word frequency within the document
+2. Co-occurrence patterns of important word pairs
+3. Presence of dominant topic-related terms
+4. Segment length normalization
 
-### Common Issues
+### Key Components
 
-- **FFmpeg Missing**: Ensure FFmpeg is installed and available in your system PATH
-- **Memory Errors**: Large videos may require significant RAM; consider processing in smaller chunks
-- **Transcription Accuracy**: Speech recognition accuracy varies with audio quality; ensure clear audio for best results
+- **Whisper API Integration**: Leverages OpenAI's Whisper for accurate speech recognition
+- **Asynchronous Processing**: Uses `asyncio` for efficient audio/video processing
+- **FastAPI Web Service**: Provides a modern, high-performance API interface
+- **Pydantic Models**: Ensures data validation and serialization
+
+## 🤝 Contributing
+
+Contributions to improve Video Meeting Summarizer are welcome. Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🤝 Contributing
+## 🔗 References
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+This project is based on research from:
+- ["Automated video summarization using speech transcripts"](https://scispace.com/pdf/automated-video-summarization-using-speech-transcripts-51swqrqbg4.pdf)
 
 ## 📧 Contact
 
-For questions or feedback, please contact [your-email@example.com](mailto:your-email@example.com)
+For questions or feedback, please reach out to:
+- Project Team - [your-email@example.com](mailto:your-email@example.com)

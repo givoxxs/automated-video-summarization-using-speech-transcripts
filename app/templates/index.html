@@ -7,52 +7,116 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        :root {
+            --pastel-pink: #FFD1DC;
+            --pastel-red: #FFB6B9;
+            --pastel-yellow: #FFEEBB;
+            --pastel-orange: #FFD8B1;
+            --pastel-purple: #E0BBE4;
+        }
+        .bg-gradient-pastel {
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-yellow));
+        }
+        .bg-pastel-pink {
+            background-color: var(--pastel-pink);
+        }
+        .bg-pastel-red {
+            background-color: var(--pastel-red);
+        }
+        .text-pastel-red {
+            color: var(--pastel-red);
+        }
+        .text-pastel-pink {
+            color: var(--pastel-pink);
+        }
+        .text-pastel-yellow {
+            color: var(--pastel-yellow);
+        }
+        .border-pastel-pink {
+            border-color: var(--pastel-pink) !important;
+        }
+        .btn-pastel-pink {
+            background-color: var(--pastel-pink);
+            border-color: var(--pastel-pink);
+            color: #333;
+        }
+        .btn-pastel-pink:hover {
+            background-color: #FFB6C1;
+            border-color: #FFB6C1;
+            color: #333;
+        }
+        .btn-pastel-yellow {
+            background-color: var(--pastel-yellow);
+            border-color: var(--pastel-yellow);
+            color: #333;
+        }
+        .btn-pastel-yellow:hover {
+            background-color: #FFE4B5;
+            border-color: #FFE4B5;
+            color: #333;
+        }
+        .btn-outline-pastel-pink {
+            border-color: var(--pastel-pink);
+            color: #333;
+        }
+        .btn-outline-pastel-pink:hover {
+            background-color: var(--pastel-pink);
+            color: #333;
+        }
+        .btn-pastel-gradient {
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-yellow));
+            border: none;
+            color: #333;
+        }
+        .btn-pastel-gradient:hover {
+            background: linear-gradient(135deg, var(--pastel-red), var(--pastel-orange));
+            color: #333;
+        }
+    </style>
 </head>
-<body class="bg-gradient-blue">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-blue">
+<body class="bg-gradient-pastel">
+    <nav class="navbar navbar-expand-lg bg-pastel-pink">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-video me-2 text-light-blue"></i>
+            <a class="navbar-brand text-dark" href="#">
+                <i class="fas fa-video me-2 text-danger"></i>
                 <span class="fw-bold">Video Meeting Summarizer</span>
             </a>
         </div>
-    </nav>    <div class="container py-5">
+    </nav><div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="card shadow-lg border-0 rounded-lg">
-                    <div class="card-header bg-blue py-3">
-                        <h3 class="text-center fw-bold text-white mb-0">
-                            <i class="fas fa-film me-2 text-light-blue"></i>Summarize Your Meeting Videos
+                <div class="card-header bg-pastel-pink py-3">
+                        <h3 class="text-center fw-bold text-dark mb-0">
+                            <i class="fas fa-film me-2 text-danger"></i>Summarize Your Meeting Videos
                         </h3>
-                    </div>                    <div class="card-body">
+                    </div><div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="upload-container mb-4 text-center">
                                     <div id="dropZone" class="drop-zone rounded-3 p-4 border border-dashed border-blue position-relative">
-                                        <input type="file" id="fileInput" class="position-absolute top-0 start-0 opacity-0 w-100 h-100" accept="video/*">
-                                        <div class="text-center">
-                                            <i class="fas fa-cloud-upload-alt fa-3x text-blue mb-2"></i>
+                                        <input type="file" id="fileInput" class="position-absolute top-0 start-0 opacity-0 w-100 h-100" accept="video/*">                                        <div class="text-center">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-danger mb-2"></i>
                                             <h5>Drag & Drop or Click to Upload</h5>
                                             <p class="text-secondary small">Supported formats: MP4, AVI, MOV</p>
                                         </div>
-                                    </div>
-                                    <div id="fileInfo" class="mt-3 d-none">                                <div class="d-flex align-items-center">
-                                            <i class="fas fa-file-video text-blue me-2"></i>
+                                    </div>                                    <div id="fileInfo" class="mt-3 d-none">                                <div class="d-flex align-items-center">
+                                            <i class="fas fa-file-video text-danger me-2"></i>
                                             <span id="fileName">filename.mp4</span>
-                                            <button id="removeFile" class="btn btn-sm btn-outline-blue ms-auto">
+                                            <button id="removeFile" class="btn btn-sm btn-outline-pastel-pink ms-auto">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group mb-3">
+                                </div>                                <div class="form-group mb-3">
                                     <label for="durationSlider" class="form-label">
-                                        <i class="fas fa-clock me-2 text-blue"></i>Target Duration: <span id="durationValue" class="text-blue fw-bold">5</span> minutes
+                                        <i class="fas fa-clock me-2 text-danger"></i>Target Duration: <span id="durationValue" class="text-danger fw-bold">5</span> minutes
                                     </label>
-                                    <input type="range" class="form-range blue-range" id="durationSlider" min="1" max="10" value="5">
+                                    <input type="range" class="form-range" id="durationSlider" min="1" max="10" value="5" style="accent-color: var(--pastel-red);">
                                 </div>
                                 <div class="d-grid">
-                                    <button id="processBtn" class="btn btn-blue btn-lg" disabled>
+                                    <button id="processBtn" class="btn btn-pastel-gradient btn-lg" disabled>
                                         <i class="fas fa-magic me-2"></i>Generate Summary
                                     </button>
                                 </div>
@@ -79,12 +143,11 @@
                                                     <source id="videoSource" src="" type="video/mp4">
                                                     Your browser does not support the video tag.
                                                 </video>
-                                            </div>
-                                            <div class="d-grid gap-2">
-                                                <a id="downloadBtn" class="btn btn-blue-gradient" href="#" download>
+                                            </div>                                            <div class="d-grid gap-2">
+                                                <a id="downloadBtn" class="btn btn-pastel-gradient" href="#" download>
                                                     <i class="fas fa-download me-2"></i>Download Summary
                                                 </a>
-                                                <button id="newSummaryBtn" class="btn btn-outline-blue">
+                                                <button id="newSummaryBtn" class="btn btn-outline-pastel-pink">
                                                     <i class="fas fa-plus me-2"></i>Create New Summary
                                                 </button>
                                             </div>
@@ -94,11 +157,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                  <div class="card mt-4 shadow-sm border-blue-light">
-                    <div class="card-body">
-                        <h5><i class="fas fa-info-circle me-2 text-blue"></i>How It Works</h5>
-                        <ol class="mb-0 text-blue-dark">
+                </div>                  <div class="card mt-4 shadow-sm border-pastel-pink">
+                    <div class="card-body" style="background-color: var(--pastel-yellow); border-radius: 0.25rem;">
+                        <h5><i class="fas fa-info-circle me-2 text-danger"></i>How It Works</h5>
+                        <ol class="mb-0 text-dark">
                             <li>Upload your video meeting recording</li>
                             <li>Adjust the target duration for your summary</li>
                             <li>Click "Generate Summary" and wait for processing</li>
@@ -109,12 +171,6 @@
             </div>
         </div>
     </div>
-
-    <footer class="bg-dark-blue text-white mt-5 py-4">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2025 Video Meeting Summarizer. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/app.js"></script>

@@ -1,10 +1,15 @@
+# filepath: d:\Sgroup\Sgroup-AI\video-meet-summarier\app\utils\calc_score.py
 # app/services/scoring.py
 import math
+import logging
 from collections import Counter, defaultdict
 from typing import List, Dict, Tuple, Set
 
 from app.config import get_config
 from app.models.base import Segment, TimedWord
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 config = get_config()
 

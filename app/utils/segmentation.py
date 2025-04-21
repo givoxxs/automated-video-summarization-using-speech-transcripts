@@ -1,3 +1,4 @@
+# filepath: d:\Sgroup\Sgroup-AI\video-meet-summarier\app\utils\segmentation.py
 from typing import List, Tuple
 import logging
 from app.models.base import TimedWord, Segment
@@ -20,14 +21,14 @@ def calc_pauses(transcripts: List[TimedWord]) -> List[Tuple[float, int]]:
 
 async def segment_transcript(transcript: List[TimedWord]) -> List[Segment]:
     if not transcript:
-        print("Input transcript list is empty, returning empty segments.")
+        logger.warning("Input transcript list is empty, returning empty segments.")
         return []
     
-    # print ra 5 timedword đầu tiên
-    print("First 5 timed words:")
+    # Log the first 5 timed words
+    logger.info("First 5 timed words:")
     
     for word in transcript[:5]:
-        print(word)
+        logger.info(f"{word}")
     
     pauses = calc_pauses(transcript)
     if not pauses:
@@ -35,7 +36,7 @@ async def segment_transcript(transcript: List[TimedWord]) -> List[Segment]:
         start_time = transcript[0].start if transcript else 0.0
         end_time = transcript[-1].end if transcript else 0.0
         duration = max(0.0, end_time - start_time)
-        print("No pauses found between words, creating a single segment.")
+        logger.info("No pauses found between words, creating a single segment.")
         return [Segment(id=0, text=segment_text, start_time=start_time, end_time=end_time, duration=duration, words=transcript)]
     
     segment_boundaries = [0]
@@ -52,7 +53,7 @@ async def segment_transcript(transcript: List[TimedWord]) -> List[Segment]:
         window = pauses[sstart_idx:send_idx]
         
         if not window:
-            print(f"Window is empty at index {i}, skipping.")
+            logger.debug(f"Window is empty at index {i}, skipping.")
             continue
         
         window_sorted = sorted(window, key=lambda x: x[0], reverse=True)
@@ -76,15 +77,15 @@ async def segment_transcript(transcript: List[TimedWord]) -> List[Segment]:
                 is_checked_2 = True
 
             if is_checked_2:
-                current_idx =  current_pause_idx  + 1
+                current_idx = current_pause_idx + 1
                 if current_idx != segment_boundaries[-1]:
                     segment_boundaries.append(current_idx)
-                    print(f"Adding segment boundary at index {current_idx} with pause duration {current_pause_duration}.")
-                    print("Segments now: ", segment_boundaries)
+                    logger.debug(f"Adding segment boundary at index {current_idx} with pause duration {current_pause_duration}.")
+                    logger.debug(f"Segments now: {segment_boundaries}")
     
     if len(transcript) not in segment_boundaries:
         segment_boundaries.append(len(transcript))
-        print(f"Adding final segment boundary at index {len(transcript)}.")
+        logger.debug(f"Adding final segment boundary at index {len(transcript)}.")
     
     segment_boundaries = sorted(list(set(segment_boundaries)))
     
@@ -100,12 +101,12 @@ async def segment_transcript(transcript: List[TimedWord]) -> List[Segment]:
         
         segment_handle = transcript[start_idx:end_idx]
         if not segment_handle:
-            print(f"Segment handle is empty for indices {start_idx} to {end_idx}, skipping.")
+            logger.warning(f"Segment handle is empty for indices {start_idx} to {end_idx}, skipping.")
             continue
         
         segment_text = " ".join([w.word for w in segment_handle])
         if not segment_text.strip():
-            print(f"Segment {counter} is empty, skipping.")
+            logger.warning(f"Segment {counter} is empty, skipping.")
             continue
         
         start_time = segment_handle[0].start if segment_handle else 0.0
@@ -114,7 +115,7 @@ async def segment_transcript(transcript: List[TimedWord]) -> List[Segment]:
         duration = max(0.0, end_time - start_time)
         
         if duration <= 0:
-            print(f"Segment {counter} has non-positive duration, skipping.")
+            logger.warning(f"Segment {counter} has non-positive duration, skipping.")
             continue
         
         segments.append(Segment(
@@ -126,6 +127,6 @@ async def segment_transcript(transcript: List[TimedWord]) -> List[Segment]:
             words=segment_handle
         ))
         counter += 1
-        print(f"Segment {counter} created with duration {duration:.3f}s.")
+        logger.debug(f"Segment {counter} created with duration {duration:.3f}s.")
     
     return segments

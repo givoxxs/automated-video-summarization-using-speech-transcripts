@@ -6,7 +6,7 @@ import logging
 import itertools # Để tạo cặp từ
 
 from app.models.summarization import Segment, TimedWord
-# Giả sử config chứa các hằng số: SCORING_K, SCORING_B, DOMINANT_PAIR_COUNT, DOMINANT_PAIR_BOOST
+
 try:
     from app.core.config import SCORING_K, SCORING_B, DOMINANT_PAIR_COUNT, DOMINANT_PAIR_BOOST
 except ImportError:

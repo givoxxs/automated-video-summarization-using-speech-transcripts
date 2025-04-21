@@ -1,6 +1,10 @@
 from pathlib import Path
 import os
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if it exists
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -10,8 +14,7 @@ class Config:
     PATHS = {
         "video": BASE_DIR / "video",
         "audio": BASE_DIR / "audio", 
-        "transcript": BASE_DIR / "transcript",
-        "summary": BASE_DIR / "summary"
+        "transcript": BASE_DIR / "transcript"
     }
     
     def __init__(self, base_dir: Path = None):
@@ -36,8 +39,15 @@ class Config:
         self.SUMMARY_DIR = self.BASE_DIR / "summaries"
         self.SUMMARY_DIR.mkdir(parents=True, exist_ok=True)
         
+        # Whisper configuration
         self.WHISPER_MODEL_NAME = "tiny"  # Default model name for Whisper
         
+        # Azure Speech Service configuration
+        self.AZURE_SPEECH_KEY = os.getenv("AZURE_SPEECH_KEY", "")
+        self.AZURE_SPEECH_REGION = os.getenv("AZURE_SPEECH_REGION", "eastus")
+        self.AZURE_SPEECH_ENDPOINT = os.getenv("AZURE_SPEECH_ENDPOINT", "https://eastus.api.cognitive.microsoft.com/")
+        self.USE_AZURE_SPEECH = os.getenv("USE_AZURE_SPEECH", "False").lower() == "true"
+        self.WHISPER_LOCAL = os.getenv("WHISPER_LOCAL", "False").lower() == "true"
     
     def create_directories(self):
         try:
@@ -59,10 +69,6 @@ class Config:
     @property
     def transcript_path(self) -> Path:
         return self.PATHS["transcript"]
-    
-    @property
-    def summary_path(self) -> Path:
-        return self.PATHS["summary"]
 
 # Get the project root directory (parent of the app directory)
 project_root = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
