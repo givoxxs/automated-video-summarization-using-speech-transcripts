@@ -66,12 +66,16 @@ async def generate_skim(
             current_total_duration += segment.duration
             used_indices.add(i)
             # logger.debug(f"Selected segment {segment.id} (eff: {item['efficiency']:.4f}, dur: {segment.duration:.2f}s). Remaining time: {remaining_time:.2f}s")
+            print((f"Selected segment {segment.id} (eff: {item['efficiency']:.4f}, dur: {segment.duration:.2f}s). Remaining time: {remaining_time:.2f}s"))
 
     print(f"Greedy selection phase done. Selected {len(selected_segments_info)} segments. Current duration: {current_total_duration:.2f}s. Remaining time: {remaining_time:.2f}s")
 
     # 4. Cải tiến: Tìm segment nhỏ hơn để lấp đầy thời gian còn lại
     # Ngưỡng nhỏ để xem xét lấp đầy (ví dụ > 0.5 giây)
-    fill_threshold = 0.5
+    # fill_threshold = 0.5
+    fill_threshold_percent = 0.5  # 0.5% của thời lượng mục tiêu
+    fill_threshold = max(0.5, target_duration * fill_threshold_percent / 100)  
+    print(f"Fill threshold: {fill_threshold:.2f}s ({fill_threshold_percent:.2f}% of target duration)")
     if remaining_time > fill_threshold:
         print(f"Attempting to fill remaining time: {remaining_time:.2f}s")
         best_fit_segment_info = None
@@ -119,26 +123,41 @@ async def generate_skim(
             cut_segment(original_video_path, segment.start_time, segment.end_time, segment_temp_path)
         )
 
-    print(f"Starting to cut {len(cut_tasks)} segments...")
-    # Thực thi các tác vụ cắt song song và thu kết quả (True/False hoặc Exception)
-    # results = await asyncio.gather(*cut_tasks, return_exceptions=True)
-    # ---> THAY BẰNG VÒNG LẶP TUẦN TỰ <---
-    print(f"Starting to cut {len(cut_tasks)} segments sequentially...")
-    results = [] # Lưu kết quả hoặc exception
-    for i, task_coro in enumerate(cut_tasks):
-        segment_id = final_selected_segments[i].id
-        segment_path = segment_file_paths[i]
-        print(f"--- Cutting segment {segment_id} ---")
-        try:
-            result = await task_coro # Chạy từng task một
-            results.append(result) # Thêm kết quả (True/False) vào list
-            if result is True:
+    # Cách sửa - xử lý song song
+    print(f"Starting to cut {len(cut_tasks)} segments in parallel...")
+    try:
+        # Thực thi tất cả các coroutine cùng một lúc
+        results = await asyncio.gather(*cut_tasks, return_exceptions=True)
+        
+        # Xử lý kết quả
+        for i, result in enumerate(results):
+            segment_id = final_selected_segments[i].id
+            segment_path = segment_file_paths[i]
+            if isinstance(result, Exception):
+                print(f"--- Failed to cut segment {segment_id} (path: {segment_path}): {result} ---")
+            elif result is True:
                 print(f"--- Successfully cut segment {segment_id} ---")
             else:
                 print(f"--- Failed to cut segment {segment_id} (path: {segment_path}). Function returned False. ---")
-        except Exception as e:
-            print(f"--- Failed to cut segment {segment_id} (path: {segment_path}): {e} ---")
-            results.append(e) # Thêm exception vào list
+    except Exception as e:
+        print(f"Fatal error during parallel cutting: {e}")
+    # ---> THAY BẰNG VÒNG LẶP TUẦN TỰ <---
+    # print(f"Starting to cut {len(cut_tasks)} segments sequentially...")
+    # results = [] # Lưu kết quả hoặc exception
+    # for i, task_coro in enumerate(cut_tasks):
+    #     segment_id = final_selected_segments[i].id
+    #     segment_path = segment_file_paths[i]
+    #     print(f"--- Cutting segment {segment_id} ---")
+    #     try:
+    #         result = await task_coro # Chạy từng task một
+    #         results.append(result) # Thêm kết quả (True/False) vào list
+    #         if result is True:
+    #             print(f"--- Successfully cut segment {segment_id} ---")
+    #         else:
+    #             print(f"--- Failed to cut segment {segment_id} (path: {segment_path}). Function returned False. ---")
+    #     except Exception as e:
+    #         print(f"--- Failed to cut segment {segment_id} (path: {segment_path}): {e} ---")
+    #         results.append(e) # Thêm exception vào list
     # ---> KẾT THÚC THAY THẾ <---
 
 

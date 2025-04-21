@@ -17,9 +17,9 @@ import time
 
 config = get_config()
 
-# model_whisper = load_whisper_model(model_name=config.WHISPER_MODEL_NAME)
-# def get_model_whisper() -> Optional[Any]:
-#     return model_whisper
+model_whisper = load_whisper_model(model_name=config.WHISPER_MODEL_NAME)
+def get_model_whisper() -> Optional[Any]:
+    return model_whisper
 WHISPER_API_URL = "https://899d-34-124-163-238.ngrok-free.app/transcribe"
 
 def call_whisper_api(audio_path: Path) -> List[TimedWord]:
@@ -56,7 +56,7 @@ def call_whisper_api(audio_path: Path) -> List[TimedWord]:
 async def summary_video(
     video_path: Path,
     target_duration: int = 300, # 5 phút
-    model_name: str = "base",
+    model_name: str = "tiny",
 ):
     # step 1: extract video
     try: 
@@ -70,24 +70,24 @@ async def summary_video(
             print("Failed to create audio file.")
             return
         # step 2: load whisper model
-        # model = get_model_whisper()
-        # if not model:
-        #     print("Failed to load Whisper model.")
-        #     return
+        model = get_model_whisper()
+        if not model:
+            print("Failed to load Whisper model.")
+            return
         # step 3: extract transcript
-        # transcripts = extract_transcript(audio_path, model)
-        # if not transcripts:
-        #     print("Failed to extract transcript.")
-        #     return
+        transcripts = extract_transcript(output_path, model)
+        if not transcripts:
+            print("Failed to extract transcript.")
+            return
         
         # --- Step 3: Gọi API để extract transcript ---
-        print("Step 3: Extracting transcript via API...")
-        transcripts = call_whisper_api(output_path) # Gọi hàm mới
-        if not transcripts:
-            print("Failed to extract transcript via API.")
-            # Có thể thêm xử lý xóa file audio tạm ở đây nếu muốn
-            # if os.path.exists(audio_path): os.remove(audio_path)
-            return
+        # print("Step 3: Extracting transcript via API...")
+        # transcripts = call_whisper_api(output_path) # Gọi hàm mới
+        # if not transcripts:
+        #     print("Failed to extract transcript via API.")
+        #     # Có thể thêm xử lý xóa file audio tạm ở đây nếu muốn
+        #     # if os.path.exists(audio_path): os.remove(audio_path)
+        #     return
         # step 4: segment transcript
         print("Step 4: Segmenting transcript...")
         segments = await segment_transcript(transcripts)

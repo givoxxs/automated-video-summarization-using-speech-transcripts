@@ -36,7 +36,7 @@ class Config:
         self.SUMMARY_DIR = self.BASE_DIR / "summaries"
         self.SUMMARY_DIR.mkdir(parents=True, exist_ok=True)
         
-        self.WHISPER_MODEL_NAME = "base"  # Default model name for Whisper
+        self.WHISPER_MODEL_NAME = "tiny"  # Default model name for Whisper
         
     
     def create_directories(self):
