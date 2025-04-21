@@ -172,8 +172,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 This project is based on research from:
 - ["Automated video summarization using speech transcripts"](https://scispace.com/pdf/automated-video-summarization-using-speech-transcripts-51swqrqbg4.pdf)
-
-## 📧 Contact
-
-For questions or feedback, please reach out to:
-- Project Team - [your-email@example.com](mailto:your-email@example.com)
